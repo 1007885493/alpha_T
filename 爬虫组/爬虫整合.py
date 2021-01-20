@@ -36,7 +36,7 @@ def filterBox(state) :
         dataPackage = filter_ban()
     if state == 'login' :
         dataPackage = filter_login()
-    data_outPut = []
+
 
     return dataPackage
 
@@ -44,7 +44,7 @@ def filterBox(state) :
 def filter_chat(cookies, Game, Branch, ServiceNum, time, num) :
     url_sd = 'http://t.4399data.com/report/?r=log/gameLog/index&platform=' + Branch + '&game=' + Game + '&p=' + Branch + '&channel=&server=S' + ServiceNum + '&tab=&begin=' + today.isoformat() + '%20'+ time +':00&end=' + today.isoformat() + '%2023:59:59&lock=on&type=chat&account_name=&role_id=&target_role_id=&role_name=&msg=&user_ip=&did=&min_dim_level=&max_dim_level=&chatType=&contentType=&dataSource=slave&banTypeSel=all&gsInfo=0&getListForAjax=1&page=1&length=' + num
 
-    data_sd = requests.get(url=url_sd, cookies=cookieProcessing(cookie_T)).text.encode('utf-8').decode(
+    data_sd = requests.get(url=url_sd, cookies=cookies).text.encode('utf-8').decode(
         'unicode_escape').replace('{', '').split('},')
     data_dirt = {}
     data_outPut = []
