@@ -29,14 +29,15 @@ def filterBox(state,flag) :
     # ServiceNum = balabala
     # 返回的数据包
     dataPackage = []
+    dataPackageBox = []
     if state == 'chat' :
-        dataPackage = filter_chat(cookies,GameBox[flag],)
+        dataPackage = filter_chat(cookies,GameBox[flag],BranchBox[flag][0])
     if state == 'ban' :
         dataPackage = filter_ban(cookies)
     if state == 'login' :
         dataPackage = filter_login(cookies)
 
-    return dataPackage
+    return dataPackageBox
 
 # 聊天日志
 def filter_chat(cookies, Game, Branch, ServiceNum, time, num) :
