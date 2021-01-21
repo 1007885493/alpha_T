@@ -77,3 +77,16 @@ if re.search('jie-tu|duo-shao.*-jia|^dian$|w.{1,2}-x.{1,3}$|dian.{0,3}-hua$', ge
 # 花里胡哨组
 huahua = ['▼', '▶', '◀', '◆', '▲', '●', '♦', '■']
 
+def getNewestService(Game,Branch,num) :
+    url = 'http://t.4399data.com/home/?r=index/getServer&game='+Game+'&platform=' + Branch
+    nsD = requests.get(url=url, cookies=cookieProcessing(cookieT)).text.encode('utf-8').decode('unicode_escape').split(
+        '>')
+
+    i = 3
+    # print(nsD)
+    nsOutput = nsD[i][1 :num]
+
+    while nsOutput.find('AREA')  != -1 or nsOutput.find('ADMIN') != -1 or nsOutput.find('LOGIN') != -1 or nsOutput.find('91000') != -1:
+        i = i + 2
+        nsOutput = nsD[i][1 :num]
+    return nsOutput
