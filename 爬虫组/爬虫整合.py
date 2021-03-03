@@ -5,7 +5,6 @@ import requests
 import re
 from 杂项工具.myTools import cookieProcessing
 
-
 # 全局变量
 oneday = datetime.timedelta(days=1)
 today = datetime.date.today()
@@ -19,19 +18,19 @@ GameBox = ['tjb', 'zsgl', 'tsxf']
 BranchBox = [['mix_mob1', 'mix_mob1ios', 'mix_mob2', 'mix_mob3', 'mix_mailiang', 'mix_4ios', 'mix_4ios2', ],
              ['android_cn', 'ios_cn', ],
              ['mix_mob1', 'ios_cn', 'mix_mob2', ],
-            ]
+             ]
 
 
 # 筛选表,根据state返回已过滤的粗数据
 # 返回格式统一的数据包以供分析
-def filterBox(state,flag) :
+def filterBox(state, flag) :
     # 根据游戏名获取最新区服
     # ServiceNum = balabala
     # 返回的数据包
     dataPackage = []
     dataPackageBox = []
     if state == 'chat' :
-        dataPackage = filter_chat(cookies,GameBox[flag],BranchBox[flag][0])
+        dataPackage = filter_chat(cookies, GameBox[flag], BranchBox[flag][0])
     if state == 'ban' :
         dataPackage = filter_ban(cookies)
     if state == 'login' :
@@ -39,9 +38,10 @@ def filterBox(state,flag) :
 
     return dataPackageBox
 
+
 # 聊天日志
 def filter_chat(cookies, Game, Branch, ServiceNum, time, num) :
-    url_sd = 'http://t.4399data.com/report/?r=log/gameLog/index&platform=' + Branch + '&game=' + Game + '&p=' + Branch + '&channel=&server=S' + ServiceNum + '&tab=&begin=' + today.isoformat() + '%20'+ time +':00&end=' + today.isoformat() + '%2023:59:59&lock=on&type=chat&account_name=&role_id=&target_role_id=&role_name=&msg=&user_ip=&did=&min_dim_level=&max_dim_level=&chatType=&contentType=&dataSource=slave&banTypeSel=all&gsInfo=0&getListForAjax=1&page=1&length=' + num
+    url_sd = 'http://t.4399data.com/report/?r=log/gameLog/index&platform=' + Branch + '&game=' + Game + '&p=' + Branch + '&channel=&server=S' + ServiceNum + '&tab=&begin=' + today.isoformat() + '%20' + time + ':00&end=' + today.isoformat() + '%2023:59:59&lock=on&type=chat&account_name=&role_id=&target_role_id=&role_name=&msg=&user_ip=&did=&min_dim_level=&max_dim_level=&chatType=&contentType=&dataSource=slave&banTypeSel=all&gsInfo=0&getListForAjax=1&page=1&length=' + num
 
     data_sd = requests.get(url=url_sd, cookies=cookies).text.encode('utf-8').decode(
         'unicode_escape').replace('{', '').split('},')
@@ -57,14 +57,16 @@ def filter_chat(cookies, Game, Branch, ServiceNum, time, num) :
                 continue
         try :
             # print(data_dirt)
-            data_outPut.append([data_dirt['banType'],data_dirt['server_id'],
-                                data_dirt['account_name'],data_dirt['happend_time'],
-                                data_dirt['role_id'],data_dirt['role_name'],
+            data_outPut.append([data_dirt['banType'], data_dirt['server_id'],
+                                data_dirt['account_name'], data_dirt['happend_time'],
+                                data_dirt['role_id'], data_dirt['role_name'],
                                 data_dirt['msg']])
         except :
             continue
 
     return data_outPut
+
+
 # 登录日志
 def filter_login(cookies, Game, Branch, ServiceNum, time, num) :
     url_batch = 'http://t.4399data.com/report/?r=log/gameLog/index&platform=' + Branch + '&game=' + Game + '&p=' + Branch + '&channel=&server=S' + ServiceNum + '&tab=&begin=' + today.isoformat() + '%2000:00:00&end=' + today().isoformat() + '%2023:59:59&lock=on&type=login&user_ip=&device=&did=&screen=&account_name=&role_id=&role_name=&version_not_in=&is_remove_role_id=on&dataSource=slave&gsInfo=0&getListForAjax=1&page=1&length=' + num
@@ -86,10 +88,14 @@ def filter_login(cookies, Game, Branch, ServiceNum, time, num) :
             except :
                 continue
     return data_dirt
+
+
 # 封禁记录-身份信息\游戏简称\专区\区服\时间\数量
 def filter_ban(cookies, Game, Branch, ServiceNum, time, num) :
     url_sd = 'http://t.4399data.com/report/?r=log/gameLog/index&platform=' + Branch + '&game=' + Game + '&p=' + Branch + '&channel=&server=S' + ServiceNum + '&tab=&begin=' + today.isoformat() + '%20' + time + ':00&end=' + today.isoformat() + '%2023:59:59&lock=on&type=chat&account_name=&role_id=&target_role_id=&role_name=&msg=&user_ip=&did=&min_dim_level=&max_dim_level=&chatType=&contentType=&dataSource=slave&banTypeSel=all&gsInfo=0&getListForAjax=1&page=1&length=' + num
-    data_sd = requests.get(url=url_sd, cookies=cookies).text.encode('utf-8').decode('unicode_escape').replace('{', '').split('},')
+    data_sd = requests.get(url=url_sd, cookies=cookies).text.encode('utf-8').decode('unicode_escape').replace('{',
+                                                                                                              '').split(
+        '},')
     data_dirt = {}
     for i in range(len(data_sd)) :
         strT = str(data_sd[i]).replace('"', '').split(',')
@@ -101,9 +107,10 @@ def filter_ban(cookies, Game, Branch, ServiceNum, time, num) :
                 continue
     return data_dirt
 
-#新服获取
-def getNewestService(Game,Branch,num) :
-    url = 'http://t.4399data.com/home/?r=index/getServer&game='+Game+'&platform=' + Branch
+
+# 新服获取
+def getNewestService(Game, Branch, num) :
+    url = 'http://t.4399data.com/home/?r=index/getServer&game=' + Game + '&platform=' + Branch
     nsD = requests.get(url=url, cookies=cookieProcessing(cookies)).text.encode('utf-8').decode('unicode_escape').split(
         '>')
 
@@ -111,7 +118,7 @@ def getNewestService(Game,Branch,num) :
     # print(nsD)
     nsOutput = nsD[i][1 :num]
 
-    while nsOutput.find('AREA')  != -1 or nsOutput.find('ADMIN') != -1 or nsOutput.find('LOGIN') != -1:
+    while nsOutput.find('AREA') != -1 or nsOutput.find('ADMIN') != -1 or nsOutput.find('LOGIN') != -1 :
         i = i + 2
         nsOutput = nsD[i][1 :num]
     return nsOutput
