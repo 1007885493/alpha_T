@@ -2,17 +2,17 @@ import re
 import requests
 import datetime
 
-
 from 杂项工具.myTools import cookieProcessing
-
-
 
 cookie = ''
 cookies = cookieProcessing(cookie)
 
+
 # 封禁记录爬虫
-def cloSpider():
-    urlC = ''
+def cloSpider(Game, Platform, Server, Time, Bantype):
+    urlC = 'http://t.4399data.com/oss/?search=&r=ban%2Frecord&p=' + Platform + '&game=' + Game + '&channel=' \
+           '&server=' + Server + '&StartTime=' + Time + '&EndTime=2021-03-05&BanType=' + Bantype + '&BanAdmin=' \
+           '&Data=&role_id=&account_name=&device=&Reason= '
     cloBox = []
     data = requests.get(url=urlC, cookies=cookies).text
     # 正则清洗
@@ -21,7 +21,7 @@ def cloSpider():
     return cloBox
 
 
-# 登录日志爬虫
+# 登录日志爬虫+混合数据产出
 def loginSpider(cloBox):
     urlL = ''
     loginBox = []
@@ -32,6 +32,3 @@ def loginSpider(cloBox):
     # 混合产出
     # 返回
     return fixData
-
-
-
