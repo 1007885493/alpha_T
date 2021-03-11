@@ -2,6 +2,9 @@ import re
 import pypinyin
 
 # cookies处理块
+import requests
+
+
 def cookieProcessing(cookie_str):
     cookies = {}
     for line in cookie_str.split(';') :
@@ -70,16 +73,18 @@ def getPinYin(strs, isYJ):
 
     return NormalPY
 
-print(getPinYin('猥馨',0))
-if re.search('jie-tu|duo-shao.*-jia|^dian$|w.{1,2}-x.{1,3}$|dian.{0,3}-hua$', getPinYin('猥馨',0)) is not None:
-    print('1')
 
 # 花里胡哨组
 huahua = ['▼', '▶', '◀', '◆', '▲', '●', '♦', '■']
 
 def getNewestService(Game,Branch,num) :
+    cookie = 'PHPSESSID=6a36028dafed5e8be60e3444c7dbf9cc; ' \
+             'AUC=a%3A2%3A%7Bs%3A5%3A%22token%22%3Bs%3A84%3A' \
+             '%22MjM2NDE1NzMwfDE2MDYzNTAxMjF8d2VueHVodWl8YWQ0ZmZlMTY2MjEwMjM0NGM3MDJmOTY5MWJkZjAyMTY%3D%22%3Bs%3A2' \
+             '%3A%22_s%22%3Bs%3A32%3A%2225b5ce6ec203d83acc6fff0ff8d5551a%22%3B%7D; AreaMoneyFlag=-1 '
+    cookieT = cookieProcessing(cookie)
     url = 'http://t.4399data.com/home/?r=index/getServer&game='+Game+'&platform=' + Branch
-    nsD = requests.get(url=url, cookies=cookieProcessing(cookieT)).text.encode('utf-8').decode('unicode_escape').split(
+    nsD = requests.get(url=url, cookies=cookieT).text.encode('utf-8').decode('unicode_escape').split(
         '>')
 
     i = 3
